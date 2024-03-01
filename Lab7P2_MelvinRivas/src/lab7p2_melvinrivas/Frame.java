@@ -6,6 +6,8 @@ package lab7p2_melvinrivas;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -36,27 +38,54 @@ public class Frame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        pop = new javax.swing.JPopupMenu();
+        Limpiar_Tablapop = new javax.swing.JMenuItem();
+        Limpiar_Arbolpop = new javax.swing.JMenuItem();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTree1 = new javax.swing.JTree();
+        arbol = new javax.swing.JTree();
         jScrollPane2 = new javax.swing.JScrollPane();
         Tabla = new javax.swing.JTable();
         buscador = new javax.swing.JTextField();
         Boton = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
+        cargar = new javax.swing.JMenuItem();
+        crear = new javax.swing.JMenuItem();
         Windows = new javax.swing.JMenu();
         jMenu3 = new javax.swing.JMenu();
         jCheckBoxMenuItem1 = new javax.swing.JCheckBoxMenuItem();
-        jMenuItem1 = new javax.swing.JMenuItem();
+        Limpiar = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
 
+        Limpiar_Tablapop.setText("jMenuItem1");
+        Limpiar_Tablapop.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Limpiar_TablapopActionPerformed(evt);
+            }
+        });
+        pop.add(Limpiar_Tablapop);
+
+        Limpiar_Arbolpop.setText("jMenuItem3");
+        pop.add(Limpiar_Arbolpop);
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        jPanel1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jPanel1MouseClicked(evt);
+            }
+        });
+
         javax.swing.tree.DefaultMutableTreeNode treeNode1 = new javax.swing.tree.DefaultMutableTreeNode("JTree");
-        jTree1.setModel(new javax.swing.tree.DefaultTreeModel(treeNode1));
-        jScrollPane1.setViewportView(jTree1);
+        arbol.setModel(new javax.swing.tree.DefaultTreeModel(treeNode1));
+        arbol.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                arbolMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(arbol);
 
         Tabla.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         Tabla.setModel(new javax.swing.table.DefaultTableModel(
@@ -73,6 +102,11 @@ public class Frame extends javax.swing.JFrame {
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
+            }
+        });
+        Tabla.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                TablaMouseClicked(evt);
             }
         });
         jScrollPane2.setViewportView(Tabla);
@@ -124,6 +158,23 @@ public class Frame extends javax.swing.JFrame {
         );
 
         jMenu1.setText("File");
+
+        cargar.setText("Cargar");
+        cargar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cargarActionPerformed(evt);
+            }
+        });
+        jMenu1.add(cargar);
+
+        crear.setText("Crear");
+        crear.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                crearActionPerformed(evt);
+            }
+        });
+        jMenu1.add(crear);
+
         jMenuBar1.add(jMenu1);
 
         Windows.setText("Windows");
@@ -139,8 +190,13 @@ public class Frame extends javax.swing.JFrame {
         });
         jMenu3.add(jCheckBoxMenuItem1);
 
-        jMenuItem1.setText("Clear table");
-        jMenu3.add(jMenuItem1);
+        Limpiar.setText("Clear table");
+        Limpiar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                LimpiarActionPerformed(evt);
+            }
+        });
+        jMenu3.add(Limpiar);
 
         Windows.add(jMenu3);
 
@@ -158,7 +214,7 @@ public class Frame extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -178,21 +234,64 @@ public class Frame extends javax.swing.JFrame {
 
     private void BotonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonActionPerformed
         // TODO add your handling code here:
-        String busca = buscador.getText();
-        administracio_persona ap = new administracio_persona(busca);
-        ap.cargarArchivo();
-        produ.addAll(ap.getListaPersonas());
-        
-        for (int i = 0; i < produ.size(); i++) {
-            
-            modelo = (DefaultTableModel) Tabla.getModel();
-            Object[] k = {produ.get(i).getId(),produ.get(i).getName(),
-            produ.get(i).getCategory(),produ.get(i).price,
-            produ.get(i).aisle, produ.get(i).getBin()};
-            modelo.addRow(k);
-        }
-        //a
+            cargartabla();
     }//GEN-LAST:event_BotonActionPerformed
+
+    private void cargarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cargarActionPerformed
+        // TODO add your handling code here:
+        cargartabla();
+    }//GEN-LAST:event_cargarActionPerformed
+
+    private void crearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_crearActionPerformed
+        // TODO add your handling code here:
+        
+
+    }//GEN-LAST:event_crearActionPerformed
+
+    private void LimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LimpiarActionPerformed
+        // TODO add your handling code here:
+                
+        Limpiar_Tabla();
+    }//GEN-LAST:event_LimpiarActionPerformed
+
+    private void Limpiar_TablapopActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Limpiar_TablapopActionPerformed
+        // TODO add your handling code here:
+        Limpiar_Tabla();
+        
+    }//GEN-LAST:event_Limpiar_TablapopActionPerformed
+
+    private void TablaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TablaMouseClicked
+        // TODO add your handling code here:
+        
+           if (evt.isMetaDown()) {
+            pop.show(evt.getComponent(),
+                    evt.getX(), evt.getY());
+
+        }
+
+
+    }//GEN-LAST:event_TablaMouseClicked
+
+    private void arbolMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_arbolMouseClicked
+        // TODO add your handling code here:
+
+        if (evt.isMetaDown()) {
+            pop.show(evt.getComponent(),
+                    evt.getX(), evt.getY());
+
+        }
+
+    }//GEN-LAST:event_arbolMouseClicked
+
+    private void jPanel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel1MouseClicked
+        // TODO add your handling code here:
+
+        if (evt.isMetaDown()) {
+            pop.show(evt.getComponent(),
+                    evt.getX(), evt.getY());
+//a
+        }     
+    }//GEN-LAST:event_jPanel1MouseClicked
 
     /**
      * @param args the command line arguments
@@ -230,24 +329,55 @@ public class Frame extends javax.swing.JFrame {
     }
     
    
+      public void cargartabla(){
+      
+                  // TODO add your handling code here:
+        String busca = buscador.getText();
+        administracio_persona ap = new administracio_persona(busca);
+        ap.cargarArchivo();
+        produ.addAll(ap.getListaPersonas());
+        
+        for (int i = 0; i < produ.size(); i++) {
             
+            modelo = (DefaultTableModel) Tabla.getModel();
+            Object[] k = {produ.get(i).getId(),produ.get(i).getName(),
+            produ.get(i).getCategory(),produ.get(i).price,
+            produ.get(i).aisle, produ.get(i).getBin()};
+            modelo.addRow(k);
+        }
+        //a
+      
+      }
+      public void Limpiar_Tabla(){
+      
+            DefaultTableModel modeli = (DefaultTableModel) Tabla.getModel();
+        modeli.setRowCount(0);
+        Tabla.setModel(modeli);
+          
+      }
+     
             
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Boton;
+    private javax.swing.JMenuItem Limpiar;
+    private javax.swing.JMenuItem Limpiar_Arbolpop;
+    private javax.swing.JMenuItem Limpiar_Tablapop;
     private javax.swing.JTable Tabla;
     private javax.swing.JMenu Windows;
+    private javax.swing.JTree arbol;
     private javax.swing.JTextField buscador;
+    private javax.swing.JMenuItem cargar;
+    private javax.swing.JMenuItem crear;
     private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTree jTree1;
+    private javax.swing.JPopupMenu pop;
     // End of variables declaration//GEN-END:variables
 }
