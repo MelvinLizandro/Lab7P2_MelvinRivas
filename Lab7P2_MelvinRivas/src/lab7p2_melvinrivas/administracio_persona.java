@@ -10,18 +10,24 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author l3306
  */
-public class administracio_persona {
+public final class administracio_persona {
     
         private ArrayList<producto> producto = new ArrayList();
     private File archivo = null;
 
+
+
+    
+    
     public administracio_persona (String path) {
         archivo = new File(path);
+        
     }
 
     public File getArchivo() {
@@ -59,12 +65,12 @@ public class administracio_persona {
             fw = new FileWriter(archivo, false);
             bw = new BufferedWriter(fw);
             for (producto t : producto) {
-                bw.write(t.getId()+ ";");
-                bw.write(t.getName() + ";");
-                bw.write(t.getCategory()+ ";");
-                bw.write(t.getPrice()+ ";");
-                bw.write(t.getAisle()+ ";");
-                bw.write(t.getBin()+ ";");
+                bw.write(t.getId()+ ",");
+                bw.write(t.getName() + ",");
+                bw.write(t.getCategory()+ ",");
+                bw.write(t.getPrice()+ ",");
+                bw.write(t.getAisle()+ ",");
+                bw.write(t.getBin()+ ",");
             }
             bw.flush();
         } catch (Exception e) {
@@ -80,18 +86,24 @@ public class administracio_persona {
         if (archivo.exists()) {
             try {
                 sc = new Scanner(archivo);
-                sc.useDelimiter(";");
+                sc.useDelimiter(",");
                 while (sc.hasNext()) {
                     producto.add(new producto(sc.nextInt(),
-                                    sc.nextLine(),
-                                    sc.nextInt(),sc.nextDouble(),
-                            sc.nextInt(),sc.nextInt()
+                                    sc.next(),
+                                    sc.nextInt()
+                            ,sc.nextDouble()
+                            ,sc.nextInt()
+                            ,sc.nextInt()
                                  )
                     );
+                    System.out.println(producto);
                 }
-            } catch (Exception ex) {
+            } catch (Exception e) {
+                e.printStackTrace();
             }
             sc.close();
+        }else{
+            JOptionPane.showMessageDialog(null, "Archivo no encontrao");
         }//FIN IF
     }
 

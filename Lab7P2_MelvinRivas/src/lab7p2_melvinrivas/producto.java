@@ -10,12 +10,12 @@ package lab7p2_melvinrivas;
  */
 public class producto {
     
-    int id;
-    String name;
-    int category;
-    double price;
-    int aisle;
-    int bin;
+    public int id;
+    public String name;
+    public int category;
+    public double price;
+    public int aisle;
+    public int bin;
 
     public producto() {
     }

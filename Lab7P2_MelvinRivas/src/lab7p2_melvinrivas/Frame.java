@@ -4,6 +4,7 @@
  */
 package lab7p2_melvinrivas;
 
+import java.io.File;
 import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
 
@@ -14,11 +15,13 @@ import javax.swing.table.DefaultTableModel;
 public class Frame extends javax.swing.JFrame {
 
     
-    DefaultTableModel model = new DefaultTableModel();
-    ArrayList <producto> producto = new ArrayList();
+
     /**
      * Creates new form Frame
      */
+    
+    public static ArrayList <producto> produ = new ArrayList();
+    DefaultTableModel modelo = new DefaultTableModel();
     public Frame() {
         initComponents();
         
@@ -39,7 +42,7 @@ public class Frame extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         Tabla = new javax.swing.JTable();
         buscador = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
+        Boton = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         Windows = new javax.swing.JMenu();
@@ -58,31 +61,7 @@ public class Frame extends javax.swing.JFrame {
         Tabla.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
         Tabla.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+
             },
             new String [] {
                 "ID ", "Name", "Category", "Price", "Aisle", "Bin"
@@ -105,7 +84,12 @@ public class Frame extends javax.swing.JFrame {
             }
         });
 
-        jButton1.setText("jButton1");
+        Boton.setText("Enter");
+        Boton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BotonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -117,7 +101,7 @@ public class Frame extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(buscador, javax.swing.GroupLayout.PREFERRED_SIZE, 536, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(Boton, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jScrollPane1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -131,7 +115,7 @@ public class Frame extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(buscador, javax.swing.GroupLayout.DEFAULT_SIZE, 41, Short.MAX_VALUE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(Boton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(29, 29, 29)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 388, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -192,6 +176,24 @@ public class Frame extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_buscadorActionPerformed
 
+    private void BotonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BotonActionPerformed
+        // TODO add your handling code here:
+        String busca = buscador.getText();
+        administracio_persona ap = new administracio_persona(busca);
+        ap.cargarArchivo();
+        produ.addAll(ap.getListaPersonas());
+        
+        for (int i = 0; i < produ.size(); i++) {
+            
+            modelo = (DefaultTableModel) Tabla.getModel();
+            Object[] k = {produ.get(i).getId(),produ.get(i).getName(),
+            produ.get(i).getCategory(),produ.get(i).price,
+            produ.get(i).aisle, produ.get(i).getBin()};
+            modelo.addRow(k);
+        }
+        //a
+    }//GEN-LAST:event_BotonActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -232,10 +234,10 @@ public class Frame extends javax.swing.JFrame {
             
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton Boton;
     private javax.swing.JTable Tabla;
     private javax.swing.JMenu Windows;
     private javax.swing.JTextField buscador;
-    private javax.swing.JButton jButton1;
     private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
