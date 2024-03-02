@@ -5,11 +5,14 @@
 package lab7p2_melvinrivas;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Scanner;
 import java.util.Set;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -63,9 +66,11 @@ public class Frame extends javax.swing.JFrame {
         jCheckBoxMenuItem1 = new javax.swing.JCheckBoxMenuItem();
         Limpiar = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
-        jMenu2 = new javax.swing.JMenu();
+        Help = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
+        jMenuItem3 = new javax.swing.JMenuItem();
 
-        Limpiar_Tablapop.setText("jMenuItem1");
+        Limpiar_Tablapop.setText("Clean Tabla");
         Limpiar_Tablapop.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 Limpiar_TablapopActionPerformed(evt);
@@ -73,7 +78,7 @@ public class Frame extends javax.swing.JFrame {
         });
         pop.add(Limpiar_Tablapop);
 
-        Limpiar_Arbolpop.setText("jMenuItem3");
+        Limpiar_Arbolpop.setText("Clean Tree");
         pop.add(Limpiar_Arbolpop);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -211,8 +216,25 @@ public class Frame extends javax.swing.JFrame {
 
         jMenuBar1.add(Windows);
 
-        jMenu2.setText("Edit");
-        jMenuBar1.add(jMenu2);
+        Help.setText("Help");
+
+        jMenuItem1.setText("Declaracion de productos");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        Help.add(jMenuItem1);
+
+        jMenuItem3.setText("Commando del programa");
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem3ActionPerformed(evt);
+            }
+        });
+        Help.add(jMenuItem3);
+
+        jMenuBar1.add(Help);
 
         setJMenuBar(jMenuBar1);
 
@@ -245,20 +267,18 @@ public class Frame extends javax.swing.JFrame {
 
     private void cargarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cargarActionPerformed
         // TODO add your handling code here:
-          File fichero = null;
-        FileReader fr = null;
-        BufferedReader br = null;
+        
       
         try {
             JFileChooser jfc = new JFileChooser("./");
-            FileNameExtensionFilter filtro = 
+            FileNameExtensionFilter capa = 
                     new FileNameExtensionFilter(
                             "Archivos de Texto", "txt");
-            FileNameExtensionFilter filtro2 = 
+            FileNameExtensionFilter capa2 = 
                 new FileNameExtensionFilter(
                         "Imagenes", "jpg", "png", "bmp");
-            jfc.setFileFilter(filtro);
-            jfc.addChoosableFileFilter(filtro2);            
+            jfc.setFileFilter(capa);
+            jfc.addChoosableFileFilter(capa2);            
             int seleccion = jfc.showOpenDialog(this);
             if (seleccion == JFileChooser.APPROVE_OPTION)
             {
@@ -266,7 +286,7 @@ public class Frame extends javax.swing.JFrame {
         administracio_persona ap = new administracio_persona(busca);
          ap.cargarArchivo();
         produ.addAll(ap.getListaPersonas());
-        
+        //a x3
         for (int i = 0; i < produ.size(); i++) {
             
             modelo = (DefaultTableModel) Tabla.getModel();
@@ -280,7 +300,7 @@ public class Frame extends javax.swing.JFrame {
             } //fin if
             
         } catch (Exception e) {
-            e.printStackTrace();
+            
         }
 
         
@@ -289,16 +309,27 @@ public class Frame extends javax.swing.JFrame {
     private void crearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_crearActionPerformed
         // TODO add your handling code here:
          JFileChooser fileChooser = new JFileChooser();
+         
+        BufferedWriter bw = null;
         int seleccion = fileChooser.showSaveDialog(this);
         if (seleccion == JFileChooser.APPROVE_OPTION) {
-            File dir = fileChooser.getSelectedFile();
-            boolean fueCreado = dir.mkdir();
-            if (fueCreado) {
-                JOptionPane.showMessageDialog(this,
-                        "Directorio Creado exitosamente");
-            } else {
-                JOptionPane.showMessageDialog(this,
-                        "El directorio no fue creado");
+            File file = fileChooser.getSelectedFile();
+            try {
+                FileWriter writer = new FileWriter(file + ".txt");
+            bw = new BufferedWriter(writer);
+                for (int i = 0; i < produ.size(); i++) {
+                bw.write(produ.get(i).getId()+ ",");
+                bw.write(produ.get(i).getName() + ",");
+                bw.write(produ.get(i).getCategory()+ ",");
+                bw.write(produ.get(i).getPrice()+ ",");
+                bw.write(produ.get(i).getAisle()+ ",");
+                bw.write(produ.get(i).getBin()+ ",");
+            }
+                bw.flush();
+                writer.close();
+                JOptionPane.showMessageDialog(this, "Archivo creado exitosamente");
+            } catch (IOException e) {
+                JOptionPane.showMessageDialog(this, "Error al crear el archivo");
             }
         }
 
@@ -348,6 +379,24 @@ public class Frame extends javax.swing.JFrame {
 //a
         }     
     }//GEN-LAST:event_jPanel1MouseClicked
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        // TODO add your handling code here:
+        
+        JOptionPane.showMessageDialog(this, "Los productos cuentan con sus respectivo (Codigo, Nombre"
+                + ", Categoria, precio, pasillo y posicion de ubicacion)");
+        
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+        // TODO add your handling code here:}
+        
+        JOptionPane.showMessageDialog(this, "Lista:  \nClear table = Borra todos los datos de la tabla"
+                + "\nRefresh Tree = Reiniciara el arbol volviendolo a cargar"
+                + "\nCargar = Podra insertar cualquier archivo de tipo txt para ser evaluado"
+                + "\nCrear = Podra crear cualquier tipo de carpeta en la ubicacion de preferencia ");
+        
+    }//GEN-LAST:event_jMenuItem3ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -416,6 +465,7 @@ public class Frame extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Boton;
+    private javax.swing.JMenu Help;
     private javax.swing.JMenuItem Limpiar;
     private javax.swing.JMenuItem Limpiar_Arbolpop;
     private javax.swing.JMenuItem Limpiar_Tablapop;
@@ -427,10 +477,11 @@ public class Frame extends javax.swing.JFrame {
     private javax.swing.JMenuItem crear;
     private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem1;
     private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;

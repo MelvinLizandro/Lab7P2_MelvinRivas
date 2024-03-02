@@ -9,7 +9,9 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Scanner;
+import java.util.Set;
 import javax.swing.JOptionPane;
 
 /**
@@ -18,7 +20,7 @@ import javax.swing.JOptionPane;
  */
 public final class administracio_persona {
     
-        private ArrayList<producto> producto = new ArrayList();
+        private ArrayList<producto> produc = new ArrayList();
     private File archivo = null;
 
 
@@ -40,21 +42,21 @@ public final class administracio_persona {
     }
 
     public ArrayList<producto> getListaPersonas() {
-        return producto;
+        return produc;
     }
 
     public void setListaPersonas(ArrayList<producto> listaPersonas) {
-        this.producto = listaPersonas;
+        this.produc = listaPersonas;
     }
 
     @Override
     public String toString() {
-        return "listaPersonas=" + producto;
+        return "listaPersonas=" + produc;
     }
 
     //extra mutador
     public void setPersona(producto p) {
-        this.producto.add(p);
+        this.produc.add(p);
     }
 
     //metodos de administracion
@@ -64,7 +66,7 @@ public final class administracio_persona {
         try {
             fw = new FileWriter(archivo, false);
             bw = new BufferedWriter(fw);
-            for (producto t : producto) {
+            for (producto t : produc) {
                 bw.write(t.getId()+ ",");
                 bw.write(t.getName() + ",");
                 bw.write(t.getCategory()+ ",");
@@ -81,31 +83,28 @@ public final class administracio_persona {
     }
 
     public void cargarArchivo() {
+        produc = new ArrayList<>();
         Scanner sc = null;
-        producto = new ArrayList();
-        if (archivo.exists()) {
-            try {
-                sc = new Scanner(archivo);
-                sc.useDelimiter(",");
-                while (sc.hasNext()) {
-                    producto.add(new producto(sc.nextInt(),
-                                    sc.next(),
-                                    sc.nextInt()
-                            ,sc.nextDouble()
-                            ,sc.nextInt()
-                            ,sc.nextInt()
-                                 )
-                            
-                    );
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-          
-        }else{
-            JOptionPane.showMessageDialog(null, "Archivo no encontrao");
-        }//FIN IF
-    }
+        try {
+            sc = new Scanner(archivo);
+            while (sc.hasNextLine()) {
+                String[] datos = sc.nextLine().split(",");
+                int id = Integer.parseInt(datos[0]);
+                String nombre = datos[1];
+                int cantidad = Integer.parseInt(datos[2]);
+                double precio = Double.parseDouble(datos[3]);
+                int otroDato1 = Integer.parseInt(datos[4]);
+                int otroDato2 = Integer.parseInt(datos[5]);
 
-    
+                produc.add(new producto(id, nombre, cantidad, precio, otroDato1, otroDato2));
+            }
+            
+        } catch (Exception e) {
+            
+        } 
+            if (sc != null) {
+                sc.close();
+            }
+        
+    }
 }
