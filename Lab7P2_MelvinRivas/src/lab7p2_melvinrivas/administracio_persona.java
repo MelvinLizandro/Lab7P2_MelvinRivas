@@ -95,13 +95,13 @@ public final class administracio_persona {
                             ,sc.nextInt()
                             ,sc.nextInt()
                                  )
+                            
                     );
-                    System.out.println(producto);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            sc.close();
+          
         }else{
             JOptionPane.showMessageDialog(null, "Archivo no encontrao");
         }//FIN IF

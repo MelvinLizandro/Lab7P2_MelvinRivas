@@ -4,10 +4,16 @@
  */
 package lab7p2_melvinrivas;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -151,10 +157,10 @@ public class Frame extends javax.swing.JFrame {
                     .addComponent(buscador, javax.swing.GroupLayout.DEFAULT_SIZE, 41, Short.MAX_VALUE)
                     .addComponent(Boton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(29, 29, 29)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 388, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 388, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 374, Short.MAX_VALUE))
+                .addGap(26, 26, 26))
         );
 
         jMenu1.setText("File");
@@ -239,12 +245,62 @@ public class Frame extends javax.swing.JFrame {
 
     private void cargarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cargarActionPerformed
         // TODO add your handling code here:
-        cargartabla();
+          File fichero = null;
+        FileReader fr = null;
+        BufferedReader br = null;
+      
+        try {
+            JFileChooser jfc = new JFileChooser("./");
+            FileNameExtensionFilter filtro = 
+                    new FileNameExtensionFilter(
+                            "Archivos de Texto", "txt");
+            FileNameExtensionFilter filtro2 = 
+                new FileNameExtensionFilter(
+                        "Imagenes", "jpg", "png", "bmp");
+            jfc.setFileFilter(filtro);
+            jfc.addChoosableFileFilter(filtro2);            
+            int seleccion = jfc.showOpenDialog(this);
+            if (seleccion == JFileChooser.APPROVE_OPTION)
+            {
+        String busca = jfc.getSelectedFile().toString();
+        administracio_persona ap = new administracio_persona(busca);
+         ap.cargarArchivo();
+        produ.addAll(ap.getListaPersonas());
+        
+        for (int i = 0; i < produ.size(); i++) {
+            
+            modelo = (DefaultTableModel) Tabla.getModel();
+            Object[] k = {produ.get(i).getId(),produ.get(i).getName(),
+            produ.get(i).getCategory(),produ.get(i).price,
+            produ.get(i).aisle, produ.get(i).getBin()};
+            modelo.addRow(k);
+        }
+        //a
+        //a x2
+            } //fin if
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        
     }//GEN-LAST:event_cargarActionPerformed
 
     private void crearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_crearActionPerformed
         // TODO add your handling code here:
-        
+         JFileChooser fileChooser = new JFileChooser();
+        int seleccion = fileChooser.showSaveDialog(this);
+        if (seleccion == JFileChooser.APPROVE_OPTION) {
+            File dir = fileChooser.getSelectedFile();
+            boolean fueCreado = dir.mkdir();
+            if (fueCreado) {
+                JOptionPane.showMessageDialog(this,
+                        "Directorio Creado exitosamente");
+            } else {
+                JOptionPane.showMessageDialog(this,
+                        "El directorio no fue creado");
+            }
+        }
 
     }//GEN-LAST:event_crearActionPerformed
 
@@ -340,7 +396,7 @@ public class Frame extends javax.swing.JFrame {
         for (int i = 0; i < produ.size(); i++) {
             
             modelo = (DefaultTableModel) Tabla.getModel();
-            Object[] k = {produ.get(i).getId(),produ.get(i).getName(),
+            Object[] k = { produ.get(i).getId(),produ.get(i).getName(),
             produ.get(i).getCategory(),produ.get(i).price,
             produ.get(i).aisle, produ.get(i).getBin()};
             modelo.addRow(k);
