@@ -441,7 +441,7 @@ public class Frame extends javax.swing.JFrame {
         administracio_persona ap = new administracio_persona(busca);
         ap.cargarArchivo();
         produ.addAll(ap.getListaPersonas());
-        
+        //ax4
         for (int i = 0; i < produ.size(); i++) {
             
             modelo = (DefaultTableModel) Tabla.getModel();
